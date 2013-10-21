@@ -12,32 +12,7 @@ html
     == javascript_include_tag  "all"
 
   body class="#{page_classes}"
-    nav.top-bar.hide-for-small
-      ul.title-area
-        li.name
-          h1
-            a href="/" InfluxDB
-      li.toggle-topbar.menu-icon
-        a href="#"
-          span Menu
-
-      section.top-bar-section
-        ul.right
-          li.divider
-          li
-            a href="/overview" Overview
-          li.divider
-          li
-            a href="/docs" Docs
-          li.divider
-          li
-            a href="/faq" FAQ
-          li.divider
-          li
-            a href="mailto:" Contact
-          li.divider
-          li.has-form
-            a.button href="http://foundation.zurb.com/docs" Download
+    = partial "layouts/nav"
 
     section role="main"
       == yield
