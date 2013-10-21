@@ -1,22 +1,22 @@
-/* line 2, /Users/todd/Projects/errplane/influxdb.github.io/source/stylesheets/all.css.sass */
+/* line 2, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
 section header {
   background-position: center bottom;
   padding: 120px 0 120px;
   background-repeat: no-repeat;
   background-color: #476173; }
-  /* line 7, /Users/todd/Projects/errplane/influxdb.github.io/source/stylesheets/all.css.sass */
+  /* line 7, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
   section header h1 {
     color: #fef0d9;
     font-weight: 500; }
-  /* line 10, /Users/todd/Projects/errplane/influxdb.github.io/source/stylesheets/all.css.sass */
+  /* line 10, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
   section header h4 {
     color: white;
     font-weight: 100; }
 
-/* line 14, /Users/todd/Projects/errplane/influxdb.github.io/source/stylesheets/all.css.sass */
+/* line 14, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
 body {
   background-color: white; }
 
-/* line 17, /Users/todd/Projects/errplane/influxdb.github.io/source/stylesheets/all.css.sass */
+/* line 17, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
 section#main {
   margin-top: 40px; }
