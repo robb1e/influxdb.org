@@ -2904,3 +2904,7 @@ if (typeof jQuery === "undefined" &&
 
 
 
+
+
+$(document).foundation();
+
