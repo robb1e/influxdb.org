@@ -1,3 +1,3 @@
-source 'https://rubygems.org'
-gem 'github-pages'
-gem 'jekyll-slim'
+source "https://rubygems.org"
+gem "middleman-gh-pages"
+gem "middleman-slim"
