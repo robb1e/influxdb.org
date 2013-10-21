@@ -49,42 +49,44 @@ html
             .large-12.columns
               == yield
         .large-3.pull-9.columns
-          .docs.section-container.accordion data-section="accordion" data-options="one_up: false" data-section-small-style="true"
-            section.section.active
-              p.title= link_to "Getting Started", "#"
-            section.section
-              p.title= link_to "Installation", "#"
+          .section-container.accordion data-section="accordion"
+            section.active
+              p.title data-section-title=""
+                = link_to "Using InfluxDB", "#"
+              .content data-section-content=""
+                ul.side-nav
+                  li= link_to "Getting Started", "/docs"
+                  li= link_to "Installation", "/docs/setup"
+                  li= link_to "Uninstallation", "/docs/setup/uninstall.html"
+            section
+              p.title data-section-title=""
+                = link_to "Configuration", "#"
               .content
                 ul.side-nav
-                  li= link_to "Docs", "/docs"
-                  li= link_to "Get Started", "/"
-                  li= link_to "Get Started", "#"
-                  li= link_to "Get Started", "#"
-            section.section
-              p.title= link_to "Configuration", "#"
-              .content
-                ul.side-nav
-                  li= link_to "Foo", "/docs"
-            section.section
-              p.title= link_to "API", "#"
+                  li= link_to "Customizing", "/docs/config"
+                  li= link_to "Directories", "/docs/config/directories.html"
+                  li= link_to "Admin Interface", "/docs/config/admin.html"
+            section
+              p.title data-section-title=""
+                = link_to "API", "#"
               .content
                 ul.side-nav
                   li= link_to "Bar", "/docs"
-            section.section
-              p.title= link_to "Query Language", "#"
+            section
+              p.title data-section-title=""
+                = link_to "Query Language", "#"
               .content
                 ul.side-nav
                   li= link_to "Baz", "/docs"
-            section.section
-              p.title= link_to "Libraries", "#"
+            section
+              p.title data-section-title=""
+                = link_to "Libraries", "#"
               .content
                 ul.side-nav
                   li= link_to "Qux", "/docs"
-            section.section
-              p.title= link_to "Contributing", "#"
-              .content
-                ul.side-nav
-                  li= link_to "", "/docs"
+            section
+              p.title data-section-title=""
+                = link_to "Contributing", "/docs/contributing"
 
           p
             a.button.expand href="#" style="margin-bottom: 0;" Download InfluxDB
