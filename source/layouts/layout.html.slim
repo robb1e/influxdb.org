@@ -9,7 +9,10 @@ html
     /! Use title if it's in the page YAML frontmatter
     title == data.page.title || "The Middleman"
 
-    == stylesheet_link_tag "foundation", "all"
+    == stylesheet_link_tag "normalize", "foundation", "all"
+    == stylesheet_link_tag "http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700"
+
+
     == javascript_include_tag  "all"
 
   body class="#{page_classes}"
@@ -26,15 +29,20 @@ html
         ul.right
           li.divider
           li
-            a href="#" Overview
+            a href="/overview" Overview
           li.divider
           li
-            a href="#" Documentation
+            a href="/docs" Documentation
           li.divider
           li
-            a href="#" FAQ
+            a href="/faq" FAQ
+          li.divider
+          li
+            a href="mailto:" Contact
           li.divider
           li.has-form
             a.button href="http://foundation.zurb.com/docs" Download
 
-    == yield
+    section role="main"
+      == yield
+

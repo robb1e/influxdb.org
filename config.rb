@@ -19,10 +19,10 @@
 # With alternative layout
 # page "/path/to/file.html", :layout => :otherlayout
 #
-# A path which all have the same layout
-# with_layout :admin do
-#   page "/admin/*"
-# end
+
+with_layout :docs do
+  page "/docs/*"
+end
 
 # Proxy pages (http://middlemanapp.com/dynamic-pages/)
 # proxy "/this-page-has-no-template.html", "/template-file.html", :locals => {
@@ -36,7 +36,7 @@
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-# activate :livereload
+activate :livereload
 
 # Methods defined in the helpers block are available in templates
 # helpers do
