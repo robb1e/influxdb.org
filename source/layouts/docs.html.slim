@@ -27,8 +27,8 @@ html
             .large-12.columns
               == yield
         .large-3.pull-9.columns
-          .section-container.accordion data-section="accordion"
-            section.active
+          #docs.section-container.accordion data-section="accordion"
+            section
               p.title data-section-title=""
                 = link_to "Using InfluxDB", "#"
               .content data-section-content=""
