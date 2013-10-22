@@ -15,7 +15,7 @@ html
   body class="#{page_classes}"
     = partial "layouts/nav"
 
-    section.main
+    section#main
       .row
         .large-12.columns
           h1.docs.header Documentation
@@ -49,7 +49,7 @@ html
                 = link_to "API", "#"
               .content
                 ul.side-nav
-                  li= link_to "Bar", "/docs"
+                  li= link_to "Bar", "/docs/api"
             section
               p.title data-section-title=""
                 = link_to "Query Language", "#"
@@ -63,7 +63,7 @@ html
                 = link_to "Libraries", "#"
               .content
                 ul.side-nav
-                  li= link_to "Qux", "/docs"
+                  li= link_to "Qux", "/docs/libraries"
             section
               p.title data-section-title=""
                 = link_to "Contributing", "/docs/contributing"
