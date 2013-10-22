@@ -2900,11 +2900,19 @@ if (typeof jQuery === "undefined" &&
   };
 
 }(Foundation.zj, window, document));
+(function() {
+  $(document).foundation();
 
+  $(function() {
+    var _this = this;
+    return $("div.section-container#docs a").each(function(index, el) {
+      var item;
+      if (el.attributes.href.value === window.location.pathname) {
+        item = $(el);
+        item.parents("section").addClass("active");
+        return item.addClass("active");
+      }
+    });
+  });
 
-
-
-
-
-$(document).foundation();
-
+}).call(this);

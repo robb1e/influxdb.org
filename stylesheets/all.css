@@ -25,12 +25,16 @@ body {
 section#main {
   margin-top: 40px; }
 
-/* line 25, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
+/* line 28, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
+div#docs section li a.active {
+  font-weight: 700; }
+
+/* line 31, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
 pre {
   background-color: silver;
   padding: 10px;
   margin-bottom: 20px; }
-  /* line 29, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
+  /* line 35, /Users/todd/Projects/errplane/influxdb.org/source/stylesheets/all.css.sass */
   pre code {
     color: #333333;
     font-weight: 100; }
