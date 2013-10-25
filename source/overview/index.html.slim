@@ -1,6 +1,31 @@
 .row
-  .twelve.columns
+  .large-8.columns
     h1 Overview
-    h4.subheader More than just a time series database. A life-long companion.
-    hr
+    p 
+      'InfluxDB is a time series, events, or metrics database. It's written in Go and has no external dependencies. That means once you install it there's nothing else to manage (like Redis, HBase, or whatever). It's designed from the beginning to be distributed and scale horizontially with the number of datapoints and the number of servers. It's based off the work we did for 
+      a href="https://errplane" Errplane
+      '  which runs an earlier version of this API.
 
+    h2 Why?
+    p When we built Errplane, we wanted the data model to be flexible enough to store events like exceptions along with more traditional metrics like response times and server stats. At the same time we noticed that other companies were also building custom time series APIs on top of a database for custom analytics and metrics. Depedning on the requirements it would be on top of a regular SQL database, Redis, HBase, or Cassandra.
+    p We figured the community might benefit from the work we'd already done with our scalable backend. We wanted something that had the HTTP API built in that would scale out to billions of metrics or events. We also wanted sometehing that would make it simple to query for downsampled data, percentiles, and other aggregates at scale. Our bet is that once there's a standard API, the community will be able to build useful tooling around it for data collection, visualization, and analysis.
+
+    h2 Project Status
+    p
+      'We're currently in development mode. We're looking for potential early adopters to give feedback on the API. We're also happy to help you get it set up and integrated into your environment. Just drop us a line at
+      a href="mailto:influxdb@errplane.com" influxdb@errplane.com
+      '  or head over to the 
+      a href="https://groups.google.com/forum/#!forum/influxdb" InfluxDB mailing list
+      '.
+
+    h2 Roadmap
+    ul
+      li
+        b November 2013 - 
+        '  finalize API
+      li
+        b December 2013 - 
+        '  finish clustered version
+      li
+        b January  2014 - 
+        '  production deployment in Errplane (and maybe you?)
