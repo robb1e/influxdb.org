@@ -2,12 +2,12 @@
   .large-8.columns
     h1 Overview
     p 
-      'InfluxDB is a time series, events, or metrics database. It's written in Go and has no external dependencies. That means once you install it there's nothing else to manage (like Redis, HBase, or whatever). It's designed to be distributed and scale horizontially, but be useful even if you're only running it on a single box. It's based off the work we did for 
+      'InfluxDB is a time series, events, and metrics database. It's written in Go and has no external dependencies. That means once you install it there's nothing else to manage (like Redis, HBase, or whatever). It's designed to be distributed and scale horizontially, but be useful even if you're only running it on a single box. It's based off the work we did for 
       a href="https://errplane" Errplane
-      '  which runs an earlier version of this API.
+      '  which runs an earlier version of this API that currently manages around 2 billion data points per month.
 
     h2 Design Goals
-    p Here are the key design goals we're targeting while building InfluxDB.
+    p Here are some goals we're targeting while building InfluxDB.
     ul
       li Stores metrics data (like response times and cpu load. e.g. what you'd put into Graphite).
       li Stores events data (like exceptions, user analytics, or business analytics).
@@ -18,14 +18,14 @@
       li Simple to install and manage. Shouldn't require setting up external dependencies like Zookeeper and Hadoop.
       li Ability to compute percentiles and other functions on the fly.
       li Ability to automatically downsample data on different windows of time.
-      li Can efficiently and automatically clear out raw data daily to free up space. However, some time series will keep data for all time, while others will keep only a rolling window (like the last 30 days)
+      li Can efficiently and automatically clear out raw data daily to free up space. However, some time series will keep data forever, while others will keep only a rolling window (like the last 30 days)
       li Should be able to add on custom real-time and batch analytics processing.
       li Pubsub interface
       li Ability to automatically expand storage, but adding storage nodes is not something that is done frequently. However, should make node replacement quick and easy.
       li Highly elastic to expand computing capacity (compute nodes should scale up and down quickly)
 
     h2 Why?
-    p When we built Errplane, we wanted the data model to be flexible enough to store events like exceptions along with more traditional metrics like response times and server stats. At the same time we noticed that other companies were also building custom time series APIs on top of a database for custom analytics and metrics. Depending on the requirements it would be on top of a regular SQL database, Redis, HBase, or Cassandra.
+    p When we built Errplane, we wanted the data model to be flexible enough to store events like exceptions along with more traditional metrics like response times and server stats. At the same time we noticed that other companies were also building custom time series APIs on top of a database for analytics and metrics. Depending on the requirements these APIs would be built on top of a regular SQL database, Redis, HBase, or Cassandra.
     p We thought the community might benefit from the work we'd already done with our scalable backend. We wanted something that had the HTTP API built in that would scale out to billions of metrics or events. We also wanted sometehing that would make it simple to query for downsampled data, percentiles, and other aggregates at scale. Our hope is that once there's a standard API, the community will be able to build useful tooling around it for data collection, visualization, and analysis.
 
     h2 Project Status
@@ -34,7 +34,7 @@
       a href="mailto:influxdb@errplane.com" influxdb@errplane.com
       '  or head over to the 
       a href="https://groups.google.com/forum/#!forum/influxdb" InfluxDB mailing list
-      '.
+      '. There are three of us actively developing this full time.
 
     h2 Roadmap
     ul

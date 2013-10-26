@@ -30,26 +30,17 @@ html
           #docs.section-container.accordion data-section="accordion"
             section
               p.title data-section-title=""
-                = link_to "Using InfluxDB", "#"
+                = link_to "Getting Started", "/docs"
               .content data-section-content=""
                 ul.side-nav
                   li= link_to "Getting Started", "/docs"
                   li= link_to "Installation", "/docs/setup"
-                  li= link_to "Uninstallation", "/docs/setup/uninstall.html"
             section
               p.title data-section-title=""
-                = link_to "Configuration", "#"
+                = link_to "API", "/docs/api.html"
               .content
                 ul.side-nav
-                  li= link_to "Customizing", "/docs/config"
-                  li= link_to "Directories", "/docs/config/directories.html"
-                  li= link_to "Admin Interface", "/docs/config/admin.html"
-            section
-              p.title data-section-title=""
-                = link_to "API", "#"
-              .content
-                ul.side-nav
-                  li= link_to "Bar", "/docs/api"
+                  li= link_to "HTTP API", "/docs/api/http.html"
             section
               p.title data-section-title=""
                 = link_to "Query Language", "#"
@@ -63,7 +54,7 @@ html
                 = link_to "Libraries", "#"
               .content
                 ul.side-nav
-                  li= link_to "Qux", "/docs/libraries"
+                  li= link_to "JavaScript", "/docs/libraries/javascript.html"
             section
               p.title data-section-title=""
                 = link_to "Contributing", "/docs/contributing"
