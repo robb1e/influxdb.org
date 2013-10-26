@@ -2,13 +2,31 @@
   .large-8.columns
     h1 Overview
     p 
-      'InfluxDB is a time series, events, or metrics database. It's written in Go and has no external dependencies. That means once you install it there's nothing else to manage (like Redis, HBase, or whatever). It's designed from the beginning to be distributed and scale horizontially with the number of datapoints and the number of servers. It's based off the work we did for 
+      'InfluxDB is a time series, events, or metrics database. It's written in Go and has no external dependencies. That means once you install it there's nothing else to manage (like Redis, HBase, or whatever). It's designed to be distributed and scale horizontially, but be useful even if you're only running it on a single box. It's based off the work we did for 
       a href="https://errplane" Errplane
       '  which runs an earlier version of this API.
 
+    h2 Design Goals
+    p Here are the key design goals we're targeting while building InfluxDB.
+    ul
+      li Stores metrics data (like response times and cpu load. e.g. what you'd put into Graphite).
+      li Stores events data (like exceptions, user analytics, or business analytics).
+      li HTTP(S) interface for reading and writing data. Shouldn't require additional server code to be useful directly from the browser.
+      li Security model that will enable user facing analytics dashboards connecting directly to the HTTP API.
+      li Horizontally scalable.
+      li On disk and in memory. It shouldn't require a cluster of machines keeping everything in memory since most analytics data is cold most of the time.
+      li Simple to install and manage. Shouldn't require setting up external dependencies like Zookeeper and Hadoop.
+      li Ability to compute percentiles and other functions on the fly.
+      li Ability to automatically downsample data on different windows of time.
+      li Can efficiently and automatically clear out raw data daily to free up space. However, some time series will keep data for all time, while others will keep only a rolling window (like the last 30 days)
+      li Should be able to add on custom real-time and batch analytics processing.
+      li Pubsub interface
+      li Ability to automatically expand storage, but adding storage nodes is not something that is done frequently. However, should make node replacement quick and easy.
+      li Highly elastic to expand computing capacity (compute nodes should scale up and down quickly)
+
     h2 Why?
-    p When we built Errplane, we wanted the data model to be flexible enough to store events like exceptions along with more traditional metrics like response times and server stats. At the same time we noticed that other companies were also building custom time series APIs on top of a database for custom analytics and metrics. Depedning on the requirements it would be on top of a regular SQL database, Redis, HBase, or Cassandra.
-    p We figured the community might benefit from the work we'd already done with our scalable backend. We wanted something that had the HTTP API built in that would scale out to billions of metrics or events. We also wanted sometehing that would make it simple to query for downsampled data, percentiles, and other aggregates at scale. Our bet is that once there's a standard API, the community will be able to build useful tooling around it for data collection, visualization, and analysis.
+    p When we built Errplane, we wanted the data model to be flexible enough to store events like exceptions along with more traditional metrics like response times and server stats. At the same time we noticed that other companies were also building custom time series APIs on top of a database for custom analytics and metrics. Depending on the requirements it would be on top of a regular SQL database, Redis, HBase, or Cassandra.
+    p We thought the community might benefit from the work we'd already done with our scalable backend. We wanted something that had the HTTP API built in that would scale out to billions of metrics or events. We also wanted sometehing that would make it simple to query for downsampled data, percentiles, and other aggregates at scale. Our hope is that once there's a standard API, the community will be able to build useful tooling around it for data collection, visualization, and analysis.
 
     h2 Project Status
     p
@@ -21,11 +39,14 @@
     h2 Roadmap
     ul
       li
+        b October 2013 -
+        '  build available via Homebrew, Debian, and RedHat packages
+      li
         b November 2013 - 
         '  finalize API
       li
         b December 2013 - 
-        '  finish clustered version
+        '  clustered version finalized
       li
         b January  2014 - 
         '  production deployment in Errplane (and maybe you?)
