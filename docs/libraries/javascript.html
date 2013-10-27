@@ -3,4 +3,39 @@
 <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" /><script src="/javascripts/all.js" type="text/javascript"></script></head><body class="docs docs_libraries docs_libraries_javascript"><nav class="top-bar hide-for-small"><ul class="title-area"><li class="name"><h1><a href="/">InfluxDB</a></h1></li></ul><li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li><section class="top-bar-section"><ul class="right"><li class="divider"></li><li><a href="/overview">Overview</a></li><li class="divider"></li><li><a href="/docs/api/http.html">Docs</a></li><li class="divider"></li><li><a href="mailto:influxdb@errplane.com">Contact</a></li><li class="divider"></li><li class="has-form"><a class="button" href="#">Download</a></li></ul></section></nav><section id="main"><div class="row"><div class="large-12 columns"><h1 class="docs header">Documentation</h1><hr /></div></div><div class="row"><div class="large-9 push-3 columns"><div class="row"><div class="large-12 columns"><h2 id="javascript">JavaScript</h2>
 
 <p>The <a href="https://github.com/influxdb/influxdb-js">InfluxDB javascript library lives on GitHub</a></p>
+
+<p>You can get the most recent version here:</p>
+
+<pre><code>&lt;script type="text/javascript" src="http://play.influxdb.org/javascripts/influxdb.js"
+</code></pre>
+
+<h3 id="initialization">Initialization</h3>
+
+<p>First, create a new InfluxDB object by connecting to a running instance.</p>
+
+<pre><code>influxdb = new InfluxDB(host, port, username, password, database);
+</code></pre>
+
+<h3 id="available-functions">Available Functions</h3>
+
+<h4 id="createdatabasedatabasename">createDatabase(<em>databaseName</em>)</h4>
+
+<p>This will allow you to create a new database. This function is restricted to cluster admins.</p>
+
+<h4 id="deletedatabasedatabasename">deleteDatabase(<em>databaseName</em>)</h4>
+
+<p>This will allow you to delete a database. This function is restricted to cluster admins.</p>
+
+<h4 id="writepointseriesname-values">writePoint(<em>seriesName</em>, <em>values</em>)</h4>
+
+<p>This will allow you to write a point to a time series. The content of values should be an associative array,
+where the keys are the column names.</p>
+
+<h4 id="readpointfieldnames-seriesnames">readPoint(<em>fieldNames</em>, <em>seriesNames</em>)</h4>
+
+<p>This will allow you to read a point from a time series. The query will be constructed in the form of:</p>
+
+<pre><code>SELECT [fieldNames] FROM [seriesNames];
+</code></pre>
+
 </div></div></div><div class="large-3 pull-9 columns"><div class="section-container accordion" data-section="accordion" id="docs"><section><p class="title" data-section-title=""><a href="/docs">Getting Started</a></p><div class="content" data-section-content=""><ul class="side-nav"><li><a href="/docs">Getting Started</a></li><li><a href="/docs/setup">Installation</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="/docs/api.html">API</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/api/http.html">HTTP API</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Query Language</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/query_language">Introduction</a></li><li><a href="/docs/query_language/select.html">Select</a></li><li><a href="/docs/query_language/functions.html">Functions</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Libraries</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/libraries/javascript.html">JavaScript</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="/docs/contributing">Contributing</a></p></section></div><p><a class="button expand" href="#" style="margin-bottom: 0;">Download InfluxDB</a></p></div></div></section></body></html>
