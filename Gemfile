@@ -17,3 +17,5 @@ platforms :mri_18 do
 end
 
 gem "middleman-gh-pages"
+gem "middleman-syntax"
+gem "redcarpet"

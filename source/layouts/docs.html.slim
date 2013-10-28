@@ -9,7 +9,7 @@ html
     /! Use title if it's in the page YAML frontmatter
     title == data.page.title || "InfluxDB"
 
-    == stylesheet_link_tag "normalize", "foundation", "all"
+    == stylesheet_link_tag "normalize", "foundation", "all", "highlighting"
     == javascript_include_tag  "all"
 
   body class="#{page_classes}"
@@ -34,7 +34,6 @@ html
               .content data-section-content=""
                 ul.side-nav
                   li= link_to "Getting Started", "/docs"
-                  li= link_to "Installation", "/docs/setup"
             section
               p.title data-section-title=""
                 = link_to "API", "/docs/api.html"
