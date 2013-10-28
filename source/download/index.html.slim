@@ -1,0 +1,52 @@
+.row
+  .large-7.columns
+    h1 Download
+    p 
+      'The easiest way to get started using InfluxDB is to head over to 
+      a href="http://play.influxdb.org" play.influxdb.org
+      '  where you can create a database and start writing data and exploring it through the administrative interface in seconds. There's no signup required. It's an open sandbox for you to play in.
+
+    h2 OS X
+    p
+      'OSX users running 10.6 (Snow Leopard) or newer up to 10.9 (Mavericks) can install via 
+      a href="http://brew.sh/" Homebrew
+      '  by running 
+      code brew install influxdb
+      '  from the command line. Follow the post install instructions and InfluxDB will start up automatically for you.
+
+    h2 Ubuntu & Debian
+    p Debian users can install by downloading the package and installing it like this:
+    pre
+      code
+        | # for 64 bit systems
+          curl http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
+          sudo dpkg -i influxdb_latest_amd64.deb
+
+          # for 32 bit systems
+          curl http://s3.amazonaws.com/influxdb/influxdb_latest_i386.deb
+          sudo dpkg -i influxdb_latest_i386.deb
+
+    h2 RedHat & CentOS
+    p RedHat and CentOS users can install by downloading and installing the rpm like this:
+    pre
+      code
+        | # for 64 bit systems
+          curl http://s3.amazonaws.com/influxdb/influxdb-latest-1.x86_64.rpm
+          sudo rpm -ivh influxdb-latest-1.x86_64.rpm
+
+          # for 32 bit systems
+          curl http://s3.amazonaws.com/influxdb/influxdb-latest-1.i686.rpm
+          sudo rpm -ivh influxdb-latest-1.i686.rpm
+
+    h2 All Versions
+    p Here's a list of all the available builds and versions that we've released.
+    ul#file_list
+
+coffee:
+  $("#file_list").html("")
+  $.get 'http://s3.amazonaws.com/influxdb', (response) ->
+    items = response.getElementsByTagName("Contents")
+    for tag in items
+      fileName = tag.getElementsByTagName("Key")[0].textContent
+      $("#file_list").append("<li><a href='http://s3.amazonaws.com/influxdb/" + fileName + "'>" + fileName + "</a></li>")
+      
