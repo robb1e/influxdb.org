@@ -140,3 +140,136 @@ Then followed by
 ```
 
 So the chunks for different series can be interleaved, but they will always come back in the correct time order. You should use chunked queries when pulling back a large number of data points. If you're just pulling back data for a graph, which should generally have fewer than a few thousand points, non-chunked responses are easiest to work with.
+
+### Administration & Security
+
+The following section details the endpoints in the HTTP API for administering the cluster and managing database security.
+
+#### Creating and Dropping Databases
+
+There are two endpoints for creating or dropping databases. The requesting user must be a cluster administrator.
+
+```bash
+# create a database
+curl -X POST http://localhost:8086/db -d '{"name": "site_development"}'
+
+# drop a database
+curl -X DELETE http://localhost:8086/db/site_development
+```
+
+#### Security
+
+InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series and create and delete database admins and users. Database users are able to either read or write data based on their permissions.
+
+Here are the endpoints for administration
+
+```bash
+# get list of cluster admins
+curl http://localhost:8086/cluster_admins?u=root&p=root
+
+# add cluster admin
+curl -X POST http://localhost:8086/cluster_admins?u=root&p=root \
+  -d '{"username": "paul", "password": "i write teh docz"}'
+
+# update cluster admin password
+curl -X POST http://localhost:8086/cluster_admins/paul?u=root&p=root \
+  -d '{"password": "new pass"}'
+
+# delete cluster admin
+curl -X DELETE http://localhost:8086/cluster_admins/paul?u=root&p=root
+
+# Database admins, with a database name of site_dev
+# get list of database admins
+curl http://localhost:8086/db/site_dev/admins?u=root&p=root
+
+# add database admin
+curl -X POST http://localhost:8086/db/site_dev/admins?u=root&p=root \
+  -d '{"username": "paul", "password": "i write teh docz"}'
+
+# update database admin password
+curl -X POST http://localhost:8086/db/site_dev/admins/paul?u=root&p=root \
+  -d '{"password": "new pass"}'
+
+# delete database admin
+curl -X DELETE http://localhost:8086/db/site_dev/admins/paul?u=root&p=root
+```
+
+##### Limiting User Access
+
+Database users are a special case of user that can have their read and write permissions limited. The interface for creating and updating the users is similar to cluster and database admins.
+
+```bash
+# Database users
+# get list of database users
+curl http://localhost:8086/db/site_dev/users?u=root&p=root
+
+# add database user
+curl -X POST http://localhost:8086/db/site_dev/users?u=root&p=root \
+  -d '{"username": "paul", "password": "i write teh docz"}'
+
+# update database user password
+curl -X POST http://localhost:8086/db/site_dev/users/paul?u=root&p=root \
+  -d '{"password": "new pass"}'
+
+# delete database user
+curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u=root&p=root
+```
+
+Database users have two additional arguments when creating or updating their objects: `readPermissions` and `writePermissions`. Here's what a default database user looks like when those arguments aren't specified on create.
+
+```json
+{
+  "name": "paul",
+  "readPermissions": [
+    {
+      "matcher": ".*"
+    }
+  ],
+  "writePermissions": [
+    {
+      "matcher": ".*"
+    }
+  ]
+}
+```
+
+This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by `POST`ing to `db/site_dev/users/paul`
+
+```json
+{
+  "readPermissions": [],
+  "writePermissions": [
+    {
+      "matcher": ".*"
+    }
+  ]
+}
+```
+
+It's also possible to limit user's permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.
+
+```json
+{
+  "readPermissions": [
+    {
+      "matcher": ".*"
+    },
+    {
+      "name": "customer_events",
+      "whereClause": "where customer_id = 3"
+    }
+  ],
+  "writePermissions": [
+    {
+      "name": "customer_events",
+      "valueRestrictions": {
+        "customer_id": 3
+      }
+    }
+  ]
+}
+```
+
+In this example we have a user that is allowed to read from any time series, but when reading from customer_events, they will only be able to see events that have a customer_id of 3. The user is only able to write to the customer_events time series, but the only value they can write to the customer_id column is 3. This would let you have multiple users writing into the same analytics series without exposing their data to each other.
+
+InfluxDB decides which permission to apply by first looking for exact matches. If there is one then it is applied. Otherwise, it iterates through the regexes and uses the first matching one.
