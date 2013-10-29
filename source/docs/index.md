@@ -43,7 +43,7 @@ Note that `time` is a reserved column name. The only other reserved column name 
 
 #### Example Queries
 
-InfluxDB has a SQL-like interface. Here are some examples of queries that can be run.
+InfluxDB has a SQL-like interface. The libraries have methods to help you construct these queries or you can issue the query directly. Here are some examples of raw queries that can be run.
 
 ```javascript
 // get the latest point from the events time series
