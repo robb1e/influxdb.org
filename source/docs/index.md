@@ -81,7 +81,7 @@ series = influxdb.query(
 // get the count of events in 10 minute increments
 // from users with gmail addresses
 series = influxdb.query(
-  "select * from events " +
+  "select count(email) from events " +
   "group by time(10m) " +
   "where email =~ /.*gmail\.com/;");
 ```
