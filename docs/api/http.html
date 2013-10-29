@@ -129,6 +129,121 @@
 </span><span class="p">}</span><span class="w">
 </span></pre>
 <p>So the chunks for different series can be interleaved, but they will always come back in the correct time order. You should use chunked queries when pulling back a large number of data points. If you&rsquo;re just pulling back data for a graph, which should generally have fewer than a few thousand points, non-chunked responses are easiest to work with.</p>
+
+<h3>Administration &amp; Security</h3>
+
+<p>The following section details the endpoints in the HTTP API for administering the cluster and managing database security.</p>
+
+<h4>Creating and Dropping Databases</h4>
+
+<p>There are two endpoints for creating or dropping databases. The requesting user must be a cluster administrator.</p>
+<pre class="highlight shell"><span class="c"># create a database</span>
+curl -X POST http://localhost:8086/db -d <span class="s1">'{&quot;name&quot;: &quot;site_development&quot;}'</span>
+
+<span class="c"># drop a database</span>
+curl -X DELETE http://localhost:8086/db/site_development
+</pre>
+<h4>Security</h4>
+
+<p>InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series and create and delete database admins and users. Database users are able to either read or write data based on their permissions.</p>
+
+<p>Here are the endpoints for administration</p>
+<pre class="highlight shell"><span class="c"># get list of cluster admins</span>
+curl http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+
+<span class="c"># add cluster admin</span>
+curl -X POST http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+
+<span class="c"># update cluster admin password</span>
+curl -X POST http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
+
+<span class="c"># delete cluster admin</span>
+curl -X DELETE http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+
+<span class="c"># Database admins, with a database name of site_dev</span>
+<span class="c"># get list of database admins</span>
+curl http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+
+<span class="c"># add database admin</span>
+curl -X POST http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+
+<span class="c"># update database admin password</span>
+curl -X POST http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
+
+<span class="c"># delete database admin</span>
+curl -X DELETE http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+</pre>
+<h5>Limiting User Access</h5>
+
+<p>Database users are a special case of user that can have their read and write permissions limited. The interface for creating and updating the users is similar to cluster and database admins.</p>
+<pre class="highlight shell"><span class="c"># Database users</span>
+<span class="c"># get list of database users</span>
+curl http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+
+<span class="c"># add database user</span>
+curl -X POST http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+
+<span class="c"># update database user password</span>
+curl -X POST http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
+
+<span class="c"># delete database user</span>
+curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+</pre>
+<p>Database users have two additional arguments when creating or updating their objects: <code>readPermissions</code> and <code>writePermissions</code>. Here&rsquo;s what a default database user looks like when those arguments aren&rsquo;t specified on create.</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paul&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s2">&quot;readPermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;.*&quot;</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">&quot;writePermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;.*&quot;</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by <code>POST</code>ing to <code>db/site_dev/users/paul</code></p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;readPermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="s2">&quot;writePermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;.*&quot;</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>It&rsquo;s also possible to limit user&rsquo;s permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;readPermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;.*&quot;</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;customer_events&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="s2">&quot;whereClause&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;where customer_id = 3&quot;</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">&quot;writePermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;customer_events&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="s2">&quot;valueRestrictions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>In this example we have a user that is allowed to read from any time series, but when reading from customer<em>events, they will only be able to see events that have a customer</em>id of 3. The user is only able to write to the customer<em>events time series, but the only value they can write to the customer</em>id column is 3. This would let you have multiple users writing into the same analytics series without exposing their data to each other.</p>
+
+<p>InfluxDB decides which permission to apply by first looking for exact matches. If there is one then it is applied. Otherwise, it iterates through the regexes and uses the first matching one.</p>
 </div></div></div><div class="large-3 pull-9 columns"><div class="section-container accordion" data-section="accordion" id="docs"><section><p class="title" data-section-title=""><a href="/docs">Getting Started</a></p><div class="content" data-section-content=""><ul class="side-nav"><li><a href="/docs">Getting Started</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="/docs/api.html">API</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/api/http.html">HTTP API</a></li><li><a href="/docs/api/protobuf.html">Protobuf API</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Query Language</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/query_language">Introduction</a></li><li><a href="/docs/query_language/select.html">Select</a></li><li><a href="/docs/query_language/functions.html">Functions</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Libraries</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/libraries/javascript.html">JavaScript</a></li></ul></div></section></div><p><a class="button expand" href="/download" style="margin-bottom: 0;">Download InfluxDB</a></p></div></div></section><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
