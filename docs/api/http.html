@@ -51,7 +51,11 @@
 
 <h4>Deleting Points</h4>
 
-<p>InfluxDB is designed to delete a range of data, not individual points. It&rsquo;s handy for regularly clearing out raw data to save space in the cluster or when removing data to reimport. Send a <code>DELETE</code> request to the <code>/db/:name/series</code> endpoint with the following parameters:</p>
+<p>InfluxDB is designed to delete a range of data, not individual points. It&rsquo;s handy for regularly clearing out raw data to save space in the cluster or when removing data to reimport.</p>
+
+<h5>One Time Deletes</h5>
+
+<p>Send a <code>DELETE</code> request to the <code>/db/:name/series</code> endpoint with the following parameters:</p>
 
 <ul>
 <li><code>u</code> - username</li>
@@ -62,6 +66,24 @@
 <li><code>end</code> - epoch in seconds for the end of the range to delete</li>
 </ul>
 
+<h5>Regularly Scheduled Deletes</h5>
+
+<p>To create a delete that runs regularly send a <code>POST</code> request to <code>/db/:name/scheduled_deletes</code> with a json body</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;regex&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stats\..*&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s2">&quot;olderThan&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14d&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s2">&quot;runAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>This query will delete data older than 14 days from any series that starts with <code>stats.</code> and will run every day at 3:00 AM.</p>
+
+<p>You can see what scheduled deletes are configured and remove them like this:</p>
+<pre class="highlight shell"><span class="c"># get list of deletes</span>
+curl http://localhost:8086/db/site_dev/scheduled_deletes
+
+<span class="c"># remove a regularly scheduled delete</span>
+curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
+</pre>
 <h3>Querying Data</h3>
 
 <p>Getting data from InfluxDB is done through a single endpoint. <code>GET db/:name/series</code>. It takes five parameters:</p>
@@ -241,10 +263,10 @@ curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></pre>
-<p>In this example we have a user that is allowed to read from any time series, but when reading from customer<em>events, they will only be able to see events that have a customer</em>id of 3. The user is only able to write to the customer<em>events time series, but the only value they can write to the customer</em>id column is 3. This would let you have multiple users writing into the same analytics series without exposing their data to each other.</p>
+<p>In this example we have a user that is allowed to read from any time series, but when reading from <code>customer_events</code>, they will only be able to see events that have a <code>customer_id</code> of <code>3</code>. The user is only able to write to the <code>customer_events</code> time series, but the only value they can write to the <code>customer_id</code> column is <code>3</code>. This would let you have multiple users writing into the same analytics series without exposing their data to each other.</p>
 
 <p>InfluxDB decides which permission to apply by first looking for exact matches. If there is one then it is applied. Otherwise, it iterates through the regexes and uses the first matching one.</p>
-</div></div></div><div class="large-3 pull-9 columns"><div class="section-container accordion" data-section="accordion" id="docs"><section><p class="title" data-section-title=""><a href="/docs">Getting Started</a></p><div class="content" data-section-content=""><ul class="side-nav"><li><a href="/docs">Getting Started</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="/docs/api.html">API</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/api/http.html">HTTP API</a></li><li><a href="/docs/api/protobuf.html">Protobuf API</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Query Language</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/query_language">Introduction</a></li><li><a href="/docs/query_language/select.html">Select</a></li><li><a href="/docs/query_language/functions.html">Functions</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Libraries</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/libraries/javascript.html">JavaScript</a></li></ul></div></section></div><p><a class="button expand" href="/download" style="margin-bottom: 0;">Download InfluxDB</a></p></div></div></section><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+</div></div></div><div class="large-3 pull-9 columns"><div class="section-container accordion" data-section="accordion" id="docs"><section><p class="title" data-section-title=""><a href="/docs">Getting Started</a></p><div class="content" data-section-content=""><ul class="side-nav"><li><a href="/docs">Getting Started</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="/docs/api.html">API</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/api/http.html">HTTP API</a></li><li><a href="/docs/api/protobuf.html">Protobuf API</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Query Language</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/query_language">Introduction</a></li><li><a href="/docs/query_language/functions.html">Functions</a></li><li><a href="/docs/query_language/continuous_queries.html">Continuous Queries</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Libraries</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/libraries/javascript.html">JavaScript</a></li></ul></div></section></div><p><a class="button expand" href="/download" style="margin-bottom: 0;">Download InfluxDB</a></p></div></div></section><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
