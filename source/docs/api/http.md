@@ -54,7 +54,11 @@ Individual data points are uniquely identified by their `sequence_number`, `time
 
 #### Deleting Points
 
-InfluxDB is designed to delete a range of data, not individual points. It's handy for regularly clearing out raw data to save space in the cluster or when removing data to reimport. Send a `DELETE` request to the `/db/:name/series` endpoint with the following parameters:
+InfluxDB is designed to delete a range of data, not individual points. It's handy for regularly clearing out raw data to save space in the cluster or when removing data to reimport.
+
+##### One Time Deletes
+
+Send a `DELETE` request to the `/db/:name/series` endpoint with the following parameters:
 
 * `u` - username
 * `p` - password
@@ -62,6 +66,30 @@ InfluxDB is designed to delete a range of data, not individual points. It's hand
 * `regex` - a regex to delete from any series with a name that matches
 * `start` - epoch in seconds for the start of the range. Specify 0 to go to the beginning
 * `end` - epoch in seconds for the end of the range to delete
+
+##### Regularly Scheduled Deletes
+
+To create a delete that runs regularly send a `POST` request to `/db/:name/scheduled_deletes` with a json body
+
+```json
+{
+  "regex": "stats\..*",
+  "olderThan": "14d",
+  "runAt": 3
+}
+```
+
+This query will delete data older than 14 days from any series that starts with `stats.` and will run every day at 3:00 AM.
+
+You can see what scheduled deletes are configured and remove them like this:
+
+```bash
+# get list of deletes
+curl http://localhost:8086/db/site_dev/scheduled_deletes
+
+# remove a regularly scheduled delete
+curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
+```
 
 ### Querying Data
 
