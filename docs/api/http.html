@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head><meta charset="utf-8" /><!--Always force latest IE rendering engine or request Chrome Frame--><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><!--Use title if it's in the page YAML frontmatter--><title>InfluxDB</title><link href="/stylesheets/normalize.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="/stylesheets/foundation.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/highlighting.css" media="screen" rel="stylesheet" type="text/css" /><script src="/javascripts/all.js" type="text/javascript"></script></head><body class="docs docs_api docs_api_http"><nav class="top-bar hide-for-small"><ul class="title-area"><li class="name"><h1><a href="/">InfluxDB</a></h1></li></ul><li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li><section class="top-bar-section"><ul class="right"><li class="divider"></li><li><a href="/overview">Overview</a></li><li class="divider"></li><li><a href="/docs">Docs</a></li><li class="divider"></li><li><a href="/community">Community</a></li><li class="divider"></li><li class="has-form"><a class="button" href="/download">Download</a></li></ul></section></nav><section id="main"><div class="row"><div class="large-12 columns"><h1 class="docs header">Documentation</h1><hr /></div></div><div class="row"><div class="large-9 push-3 columns"><div class="row"><div class="large-12 columns"><h2>HTTP API</h2>
+<link href="/stylesheets/highlighting.css" media="screen" rel="stylesheet" type="text/css" /><script src="/javascripts/all.js" type="text/javascript"></script></head><body class="docs docs_api docs_api_http"><nav class="top-bar hide-for-small"><ul class="title-area"><li class="name"><h1><a href="/">InfluxDB</a></h1></li></ul><li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li><section class="top-bar-section"><ul class="right"><li class="divider"></li><li><a href="/overview">Overview</a></li><li class="divider"></li><li><a href="/docs">Docs</a></li><li class="divider"></li><li><a href="/community">Community</a></li><li class="divider"></li><li class="has-form"><a class="button" href="/download">Download</a></li></ul></section></nav><section id="main"><div class="row"><div class="large-12 columns"><h1 class="docs header">Documentation</h1><hr /></div></div><div class="row padding-bottom-large"><div class="large-9 push-3 columns"><div class="row"><div class="large-12 columns"><h2>HTTP API</h2>
 
 <p>The primary interface to InfluxDB is through the HTTP API. Through it you can write data, run queries, and do cluster administration.</p>
 
@@ -30,7 +30,7 @@
 </span></pre>
 <p>As you can see you can write to multiple time series names in a single POST. You can also write multiple points to each series. The values in <code>points</code> must have the same index as their respective column names in <code>columns</code>. However, not all points need to have values for each column, <code>null</code>s are ok.</p>
 
-<p>Note that times weren&rsquo;t specified in those points. In that case the server assigns them automatically. If you want to specify the time you can by including the <code>time</code> column in the POST.</p>
+<p>Note that times weren&rsquo;t specified in those points. In that case the server assigns them automatically. If you want to specify the time you can by including the <code>time</code> column in the POST, which should be an epoch from 1, Jan 1970 in either seconds, milliseconds, or microseconds.</p>
 <pre class="highlight json"><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
     </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;response_times&quot;</span><span class="p">,</span><span class="w">
@@ -45,5 +45,88 @@
 </span></pre>
 <p>When you include a time you need to specify the precision of the value in the call like <code>/db/foo_production/series?u=some_user&amp;p=some_password&amp;time_precision=m</code>. You can specify either second (s), millisecond (m), or microsecond (u) from epoch (1, Jan 1970). The underlying datastore keeps everything at microsecond precision, but you can specify what you&rsquo;d like when writing or querying data.</p>
 
+<h4>Updating Points</h4>
+
+<p>Individual data points are uniquely identified by their <code>sequence_number</code>, <code>time</code> and the series name. Sequence numbers are assigned automatically by the cluster. InfluxDB isn&rsquo;t optimized for updates and there are no specific guarantees if multiple writers try to update a point at the same time. However, it is possible to update a point by including the sequence_number in the write. The supplied column values will be overwritten while other columns will remain unchanged.</p>
+
+<h4>Deleting Points</h4>
+
+<p>InfluxDB is designed to delete a range of data, not individual points. It&rsquo;s handy for regularly clearing out raw data to save space in the cluster or when removing data to reimport. Send a <code>DELETE</code> request to the <code>/db/:name/series</code> endpoint with the following parameters:</p>
+
+<ul>
+<li><code>u</code> - username</li>
+<li><code>p</code> - password</li>
+<li><code>name</code> - the name of the series to delete from</li>
+<li><code>regex</code> - a regex to delete from any series with a name that matches</li>
+<li><code>start</code> - epoch in seconds for the start of the range. Specify 0 to go to the beginning</li>
+<li><code>end</code> - epoch in seconds for the end of the range to delete</li>
+</ul>
+
 <h3>Querying Data</h3>
+
+<p>Getting data from InfluxDB is done through a single endpoint. <code>GET db/:name/series</code>. It takes five parameters:</p>
+
+<ul>
+<li><code>q</code> - the query</li>
+<li><code>u</code> - username</li>
+<li><code>p</code> - password</li>
+<li><code>time_precision</code> the precision timestamps should come back in. Valid options are <code>s</code> for seconds, <code>m</code> for milliseconds, and <code>u</code> for microseconds.</li>
+<li><code>chunked</code> - true|false, false is the default.</li>
+</ul>
+
+<h4>Query</h4>
+
+<p>The query parameter uses the <a href="/docs/query_language">InfluxDB Query Language</a> and should be URI encoded.</p>
+
+<h4>Sample Response</h4>
+
+<p>Responses are JSON data that look like this</p>
+<pre class="highlight json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_series&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="s2">&quot;columns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequence_number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;column_a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;column_b&quot;</span><span class="p">],</span><span class="w">
+    </span><span class="s2">&quot;points&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">[</span><span class="mi">1383059590062</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;some string&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">]</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></pre>
+<p>The response is a collection of objects where each object is a collection of points from a specific time series (you can request data from multiple series in a single query). The index of the column name matches up with the associated index in each point. Some column values can be null. The <code>time</code> and <code>sequence_number</code> columns are special built in columns. Time is always returned as an epoch from 1, Jan, 1970. The precision of the epoch will be whatever was requested in the <code>time_precision</code> parameter.</p>
+
+<p>The <code>sequence_number</code> will only show up on queries that return raw data points. Points can be uniquely identified by the series, time, and sequence number. When doing group by qeries, sequence numbers will not be returned.</p>
+
+<p>The order of the points defaults to time desending. The only other option is to order by time ascending by adding <code>order asc</code> to the query.</p>
+
+<h4>Chunked Responses</h4>
+
+<p>If the request asks for a chunked response, json objects will get written to the HTTP response as they are ready. They will come in batches in the requested time order. That might look like this:</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a_series&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s2">&quot;columns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequence_number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;column_a&quot;</span><span class="p">],</span><span class="w">
+  </span><span class="s2">&quot;points&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">[</span><span class="mi">1383059590062</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mf">27.3</span><span class="p">],</span><span class="w">
+    </span><span class="p">[</span><span class="mi">1383059590062</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mf">97.1</span><span class="p">]</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>Then followed by</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;b_series&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s2">&quot;columns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequence_number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;column_a&quot;</span><span class="p">],</span><span class="w">
+  </span><span class="s2">&quot;points&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">[</span><span class="mi">1383059590062</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">2232.1</span><span class="p">]</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>Then followed by</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a_series&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s2">&quot;columns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequence_number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;column_a&quot;</span><span class="p">],</span><span class="w">
+  </span><span class="s2">&quot;points&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">[</span><span class="mi">1383059590000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">291.7</span><span class="p">],</span><span class="w">
+    </span><span class="p">[</span><span class="mi">1383059590000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">44.1</span><span class="p">]</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>So the chunks for different series can be interleaved, but they will always come back in the correct time order. You should use chunked queries when pulling back a large number of data points. If you&rsquo;re just pulling back data for a graph, which should generally have fewer than a few thousand points, non-chunked responses are easiest to work with.</p>
 </div></div></div><div class="large-3 pull-9 columns"><div class="section-container accordion" data-section="accordion" id="docs"><section><p class="title" data-section-title=""><a href="/docs">Getting Started</a></p><div class="content" data-section-content=""><ul class="side-nav"><li><a href="/docs">Getting Started</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="/docs/api.html">API</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/api/http.html">HTTP API</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Query Language</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/query_language">Introduction</a></li><li><a href="/docs/query_language/select.html">Select</a></li><li><a href="/docs/query_language/functions.html">Functions</a></li></ul></div></section><section><p class="title" data-section-title=""><a href="#">Libraries</a></p><div class="content"><ul class="side-nav"><li><a href="/docs/libraries/javascript.html">JavaScript</a></li></ul></div></section></div><p><a class="button expand" href="/download" style="margin-bottom: 0;">Download InfluxDB</a></p></div></div></section></body></html>
