@@ -78,6 +78,13 @@ series = influxdb.query(
   "select * from events " +
   "where state = 'ny';");
 
+// get the number of unique users in 1 hour periods
+// for the last 48 hours
+series = influxdb.query(
+  "select count(distinct(email)) from events " +
+  "group by time(1h) " +
+  "where time > now() - 2d;");
+
 // get the count of events in 10 minute increments
 // from users with gmail addresses
 series = influxdb.query(
