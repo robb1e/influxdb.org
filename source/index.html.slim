@@ -4,7 +4,76 @@ title: InfluxDB
 
 header
   .row
-    .large-9.columns
+    .large-7.columns
       h1 InfluxDB
       h4 An open-source, distributed, time series, events, and metrics database with no external dependencies.
+  
+.row.padding-bottom-medium
+  .large-4.columns.panel
+    h3
+      i.fa.fa-clock-o
+      '  Time Series
+    p Everything in InfluxDB is a time series that you can perform standard functions on like min, max, sum, count, mean, median, percentiles, and more.
 
+  .large-4.columns
+    h3
+      i.fa.fa-tachometer
+      '  Metrics
+    p Scalable metrics that you can collect on any interval, computing rollups on the fly later. Track 100 metrics or 1 million, InfluxDB scales horizontally.
+  
+  .large-4.columns.panel
+    h3
+      i.fa.fa-bar-chart-o
+      '   Events
+    p InfluxDB's data model supports arbitrary event data. Just write in a hash of associated data and count events, uniques, or grouped columns on the fly later.
+
+hr.padding-bottom-medium
+.row
+  .large-10.columns.large-centered
+    .row
+      .large-2.columns.margin-top-medium
+        i.fa.fa-html5.fa-5x
+      .large-10.columns
+        h2 HTTP API
+        p InfluxDB's built in HTTP API makes it trivial to read and write data from javascript. Build custom analytics frontends for operations, product owners, and the business without writing a single line of server side code.
+        = partial "code_examples/javascript"
+
+hr.padding-bottom-medium
+.row
+  .large-10.columns.large-centered
+    .row
+      .large-2.columns
+        i.fa.fa-search.fa-5x
+      .large-10.columns
+        h2 Powerful Query Language
+        p A SQL-like query language designed for working with time series and analytics.
+        = partial "code_examples/query"
+
+hr.padding-bottom-medium
+.row
+  .large-10.columns.large-centered
+    .row
+      .large-2.columns
+          i.fa.fa-bar-chart-o.fa-5x
+      .large-10.columns
+        h2 Built in Explorer
+        p A built in interface for querying and visualizing your data.
+
+hr.padding-bottom-medium
+.row.padding-bottom-medium
+  .large-10.columns.large-centered
+    .row
+      .large-2.columns
+        i.fa.fa-wrench.fa-5x
+      .large-10.columns
+        h2 Designed for Custom Analytics
+        p Automatically downsample raw data as it comes in. Keep data around forever or clear out select time series automatically when older than a given number of days.
+
+hr.padding-bottom-medium
+.row.padding-bottom-large
+  .large-6.columns.panel
+    h4 Newsletter Signup
+    label Keep up to date!
+    = partial "layouts/signup"
+  .large-5.columns.large-offset-1.margin-top-large
+    = link_to "Check the docs and get started!", "/docs", class: "button success radius"
