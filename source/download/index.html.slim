@@ -19,11 +19,11 @@
     pre
       code
         | # for 64 bit systems
-          curl http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
+          wget http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
           sudo dpkg -i influxdb_latest_amd64.deb
 
           # for 32 bit systems
-          curl http://s3.amazonaws.com/influxdb/influxdb_latest_i386.deb
+          wget http://s3.amazonaws.com/influxdb/influxdb_latest_i386.deb
           sudo dpkg -i influxdb_latest_i386.deb
 
     h2 RedHat & CentOS
@@ -31,11 +31,11 @@
     pre
       code
         | # for 64 bit systems
-          curl http://s3.amazonaws.com/influxdb/influxdb-latest-1.x86_64.rpm
+          wget http://s3.amazonaws.com/influxdb/influxdb-latest-1.x86_64.rpm
           sudo rpm -ivh influxdb-latest-1.x86_64.rpm
 
           # for 32 bit systems
-          curl http://s3.amazonaws.com/influxdb/influxdb-latest-1.i686.rpm
+          wget http://s3.amazonaws.com/influxdb/influxdb-latest-1.i686.rpm
           sudo rpm -ivh influxdb-latest-1.i686.rpm
 
     h2 All Versions
