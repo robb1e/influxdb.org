@@ -68,7 +68,7 @@
 
 <h5>Regularly Scheduled Deletes</h5>
 
-<p>To create a delete that runs regularly send a <code>POST</code> request to <code>/db/:name/scheduled_deletes</code> with a json body</p>
+<p>To create a delete that runs regularly send a <code>POST</code> request to <code>/db/:name/scheduled_deletes</code> with a JSON body:</p>
 <pre class="highlight json"><span class="p">{</span><span class="w">
   </span><span class="s2">&quot;regex&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stats\..*&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s2">&quot;olderThan&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14d&quot;</span><span class="p">,</span><span class="w">
@@ -102,7 +102,7 @@ curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
 
 <h4>Sample Response</h4>
 
-<p>Responses are JSON data that look like this</p>
+<p>Responses are JSON data that look like this:</p>
 <pre class="highlight json"><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
     </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_series&quot;</span><span class="p">,</span><span class="w">
@@ -115,13 +115,13 @@ curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
 </span></pre>
 <p>The response is a collection of objects where each object is a collection of points from a specific time series (you can request data from multiple series in a single query). The index of the column name matches up with the associated index in each point. Some column values can be null. The <code>time</code> and <code>sequence_number</code> columns are special built in columns. Time is always returned as an epoch from 1, Jan, 1970. The precision of the epoch will be whatever was requested in the <code>time_precision</code> parameter.</p>
 
-<p>The <code>sequence_number</code> will only show up on queries that return raw data points. Points can be uniquely identified by the series, time, and sequence number. When doing group by qeries, sequence numbers will not be returned.</p>
+<p>The <code>sequence_number</code> will only show up on queries that return raw data points. Points can be uniquely identified by the series, time, and sequence number. When doing group by queries, sequence numbers will not be returned.</p>
 
-<p>The order of the points defaults to time desending. The only other option is to order by time ascending by adding <code>order asc</code> to the query.</p>
+<p>The order of the points defaults to time desending. The only other option is to order by time ascending by adding <code>order=asc</code> to the query.</p>
 
 <h4>Chunked Responses</h4>
 
-<p>If the request asks for a chunked response, json objects will get written to the HTTP response as they are ready. They will come in batches in the requested time order. That might look like this:</p>
+<p>If the request asks for a chunked response, JSON objects will get written to the HTTP response as they are ready. They will come in batches in the requested time order. That might look like this:</p>
 <pre class="highlight json"><span class="p">{</span><span class="w">
   </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a_series&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s2">&quot;columns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequence_number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;column_a&quot;</span><span class="p">],</span><span class="w">
@@ -160,26 +160,26 @@ curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
 
 <p>There are two endpoints for creating or dropping databases. The requesting user must be a cluster administrator.</p>
 <pre class="highlight shell"><span class="c"># create a database</span>
-curl -X POST http://localhost:8086/db -d <span class="s1">'{&quot;name&quot;: &quot;site_development&quot;}'</span>
+curl -X POST http://localhost:8086/db -d <span class="s1">&#39;{&quot;name&quot;: &quot;site_development&quot;}&#39;</span>
 
 <span class="c"># drop a database</span>
 curl -X DELETE http://localhost:8086/db/site_development
 </pre>
 <h4>Security</h4>
 
-<p>InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series and create and delete database admins and users. Database users are able to either read or write data based on their permissions.</p>
+<p>InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series, and create and delete database admins and users. Database users are able to either read or write data based on their permissions.</p>
 
-<p>Here are the endpoints for administration</p>
+<p>Here are the endpoints for administration:</p>
 <pre class="highlight shell"><span class="c"># get list of cluster admins</span>
 curl http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
 
 <span class="c"># add cluster admin</span>
 curl -X POST http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+  -d <span class="s1">&#39;{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}&#39;</span>
 
 <span class="c"># update cluster admin password</span>
 curl -X POST http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
+  -d <span class="s1">&#39;{&quot;password&quot;: &quot;new pass&quot;}&#39;</span>
 
 <span class="c"># delete cluster admin</span>
 curl -X DELETE http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
@@ -190,11 +190,11 @@ curl http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;
 
 <span class="c"># add database admin</span>
 curl -X POST http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+  -d <span class="s1">&#39;{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}&#39;</span>
 
 <span class="c"># update database admin password</span>
 curl -X POST http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
+  -d <span class="s1">&#39;{&quot;password&quot;: &quot;new pass&quot;}&#39;</span>
 
 <span class="c"># delete database admin</span>
 curl -X DELETE http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
@@ -208,11 +208,11 @@ curl http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p
 
 <span class="c"># add database user</span>
 curl -X POST http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+  -d <span class="s1">&#39;{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}&#39;</span>
 
 <span class="c"># update database user password</span>
 curl -X POST http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
+  -d <span class="s1">&#39;{&quot;password&quot;: &quot;new pass&quot;}&#39;</span>
 
 <span class="c"># delete database user</span>
 curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
@@ -232,7 +232,7 @@ curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></pre>
-<p>This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by <code>POST</code>ing to <code>db/site_dev/users/paul</code></p>
+<p>This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by <code>POST</code>ing to <code>db/site_dev/users/paul</code>.</p>
 <pre class="highlight json"><span class="p">{</span><span class="w">
   </span><span class="s2">&quot;readPermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
   </span><span class="s2">&quot;writePermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -242,7 +242,7 @@ curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></pre>
-<p>It&rsquo;s also possible to limit user&rsquo;s permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.</p>
+<p>It&rsquo;s also possible to limit a user&rsquo;s permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.</p>
 <pre class="highlight json"><span class="p">{</span><span class="w">
   </span><span class="s2">&quot;readPermissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
