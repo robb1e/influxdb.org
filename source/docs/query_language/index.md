@@ -1,6 +1,6 @@
 ## Introduction
 
-InfluxDB features a SQL like query language. It's only used for querying for data. The HTTP API has endpoints for writing data and performing other database administration tasks. The only exception to this is [continuous queries](/docs/query_language/continuous_queries.html), which perpetually write their results into one or more time series.
+InfluxDB features a SQL like query language, only used for querying data. The HTTP API has endpoints for writing data and performing other database administration tasks. The only exception to this is [continuous queries](/docs/query_language/continuous_queries.html), which perpetually write their results into one or more time series.
 
 The [getting started section](/docs) has some example queries. This section will cover all of the available functions and provide some examples.
 
@@ -45,7 +45,7 @@ You can select from multiple series by name or by specifying a regex to match ag
 select * from events, errors;
 ```
 
-Get the last hour of data from the two series `events`, and `errors`. Here's a regex example
+Get the last hour of data from the two series `events`, and `errors`. Here's a regex example:
 
 ```sql
 select * from /stats\..*/i;

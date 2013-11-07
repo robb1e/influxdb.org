@@ -69,7 +69,7 @@ Send a `DELETE` request to the `/db/:name/series` endpoint with the following pa
 
 ##### Regularly Scheduled Deletes
 
-To create a delete that runs regularly send a `POST` request to `/db/:name/scheduled_deletes` with a json body
+To create a delete that runs regularly send a `POST` request to `/db/:name/scheduled_deletes` with a JSON body:
 
 ```json
 {
@@ -107,7 +107,7 @@ The query parameter uses the [InfluxDB Query Language](/docs/query_language) and
 
 #### Sample Response
 
-Responses are JSON data that look like this
+Responses are JSON data that look like this:
 
 ```json
 [
@@ -123,13 +123,13 @@ Responses are JSON data that look like this
 
 The response is a collection of objects where each object is a collection of points from a specific time series (you can request data from multiple series in a single query). The index of the column name matches up with the associated index in each point. Some column values can be null. The `time` and `sequence_number` columns are special built in columns. Time is always returned as an epoch from 1, Jan, 1970. The precision of the epoch will be whatever was requested in the `time_precision` parameter.
 
-The `sequence_number` will only show up on queries that return raw data points. Points can be uniquely identified by the series, time, and sequence number. When doing group by qeries, sequence numbers will not be returned.
+The `sequence_number` will only show up on queries that return raw data points. Points can be uniquely identified by the series, time, and sequence number. When doing group by queries, sequence numbers will not be returned.
 
-The order of the points defaults to time desending. The only other option is to order by time ascending by adding `order asc` to the query.
+The order of the points defaults to time desending. The only other option is to order by time ascending by adding `order=asc` to the query.
 
 #### Chunked Responses
 
-If the request asks for a chunked response, json objects will get written to the HTTP response as they are ready. They will come in batches in the requested time order. That might look like this:
+If the request asks for a chunked response, JSON objects will get written to the HTTP response as they are ready. They will come in batches in the requested time order. That might look like this:
 
 ```json
 {
@@ -187,9 +187,9 @@ curl -X DELETE http://localhost:8086/db/site_development
 
 #### Security
 
-InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series and create and delete database admins and users. Database users are able to either read or write data based on their permissions.
+InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series, and create and delete database admins and users. Database users are able to either read or write data based on their permissions.
 
-Here are the endpoints for administration
+Here are the endpoints for administration:
 
 ```bash
 # get list of cluster admins
@@ -261,7 +261,7 @@ Database users have two additional arguments when creating or updating their obj
 }
 ```
 
-This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by `POST`ing to `db/site_dev/users/paul`
+This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by `POST`ing to `db/site_dev/users/paul`.
 
 ```json
 {
@@ -274,7 +274,7 @@ This example user has the ability to read and write from any time series. If you
 }
 ```
 
-It's also possible to limit user's permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.
+It's also possible to limit a user's permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.
 
 ```json
 {
