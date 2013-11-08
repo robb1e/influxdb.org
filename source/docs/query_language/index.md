@@ -34,7 +34,7 @@ The time and date should be wrapped in single quotes. If you only specify the da
 Points are uniquely identified by the time series they appear in, the time, and the sequence number. Here's a query that returns a specific point.
 
 ```sql
-select * from events where time = 1383154176 and sequence_number = 2321;
+select * from events where time == 1383154176 and sequence_number == 2321;
 ```
 
 #### Selecting Multiple Series
@@ -64,11 +64,11 @@ Return the last point from every time series in the database.
 We've already seen the where clause for selecting time ranges and a specific point. You can also use it to filter based on given values, comparators, or regexes. Here are some examples of different ways to use where.
 
 ```sql
-select * from events where state = 'NY';
+select * from events where state == 'NY';
 
 select * from log_lines where line =~ /error/i;
 
-select * from events where customer_id = 23 and type = 'click';
+select * from events where customer_id == 23 and type == 'click';
 
 select * from response_times where value > 500;
 
@@ -77,10 +77,10 @@ select * from events where email !~ /.*gmail.*/;
 select * from nagios_checks where status != 0;
 
 select * from events 
-where (email =~ /.*gmail.* or email =~ /.*yahoo.*/) and state = 'ny';
+where (email =~ /.*gmail.* or email =~ /.*yahoo.*/) and state == 'ny';
 ```
 
-The where clause supports comparisons against regexes, strings, booleans, floats, integers, and the times listed before. Comparators include `=` equal to, `>` greater than, `<` less than, `!=` not equal to, `=~` matches against, `!~` doesn't match against. You can chain logic together using `and` and `or` and you can separate using `(` and `)`
+The where clause supports comparisons against regexes, strings, booleans, floats, integers, and the times listed before. Comparators include `==` equal to, `>` greater than, `<` less than, `!=` not equal to, `=~` matches against, `!~` doesn't match against. You can chain logic together using `and` and `or` and you can separate using `(` and `)`
 
 ### Group By
 
