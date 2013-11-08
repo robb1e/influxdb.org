@@ -19,14 +19,14 @@
 
 <p>You can also give a specific time and date.</p>
 <pre class="highlight sql"><span class="k">select</span> <span class="n">value</span> <span class="k">from</span> <span class="n">response_times</span> 
-<span class="k">where</span> <span class="n">time</span> <span class="o">&gt;</span> <span class="s1">&#39;2013-08-12 23:32:01.232&#39;</span> <span class="k">and</span> <span class="n">time</span> <span class="o">&lt;</span> <span class="s1">&#39;2013-08-13&#39;</span><span class="p">;</span>
+<span class="k">where</span> <span class="n">time</span> <span class="o">&gt;</span> <span class="s1">'2013-08-12 23:32:01.232'</span> <span class="k">and</span> <span class="n">time</span> <span class="o">&lt;</span> <span class="s1">'2013-08-13'</span><span class="p">;</span>
 </pre>
 <p>The time and date should be wrapped in single quotes. If you only specify the date, the time will be set to <code>00:00:00</code>. The <code>.232</code> after the hours, minutes, and seconds is optional and specifies the milliseconds.</p>
 
 <h4>Selecting a Specific Point</h4>
 
 <p>Points are uniquely identified by the time series they appear in, the time, and the sequence number. Here&rsquo;s a query that returns a specific point.</p>
-<pre class="highlight sql"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> <span class="k">where</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">1383154176</span> <span class="k">and</span> <span class="n">sequence_number</span> <span class="o">=</span> <span class="mi">2321</span><span class="p">;</span>
+<pre class="highlight sql"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> <span class="k">where</span> <span class="n">time</span> <span class="o">==</span> <span class="mi">1383154176</span> <span class="k">and</span> <span class="n">sequence_number</span> <span class="o">==</span> <span class="mi">2321</span><span class="p">;</span>
 </pre>
 <h4>Selecting Multiple Series</h4>
 
@@ -44,11 +44,11 @@
 <h3>The Where Clause</h3>
 
 <p>We&rsquo;ve already seen the where clause for selecting time ranges and a specific point. You can also use it to filter based on given values, comparators, or regexes. Here are some examples of different ways to use where.</p>
-<pre class="highlight sql"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> <span class="k">where</span> <span class="k">state</span> <span class="o">=</span> <span class="s1">&#39;NY&#39;</span><span class="p">;</span>
+<pre class="highlight sql"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> <span class="k">where</span> <span class="k">state</span> <span class="o">==</span> <span class="s1">'NY'</span><span class="p">;</span>
 
 <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">log_lines</span> <span class="k">where</span> <span class="n">line</span> <span class="o">=~</span> <span class="o">/</span><span class="n">error</span><span class="o">/</span><span class="n">i</span><span class="p">;</span>
 
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> <span class="k">where</span> <span class="n">customer_id</span> <span class="o">=</span> <span class="mi">23</span> <span class="k">and</span> <span class="k">type</span> <span class="o">=</span> <span class="s1">&#39;click&#39;</span><span class="p">;</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> <span class="k">where</span> <span class="n">customer_id</span> <span class="o">==</span> <span class="mi">23</span> <span class="k">and</span> <span class="k">type</span> <span class="o">==</span> <span class="s1">'click'</span><span class="p">;</span>
 
 <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">response_times</span> <span class="k">where</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">;</span>
 
@@ -57,9 +57,9 @@
 <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">nagios_checks</span> <span class="k">where</span> <span class="n">status</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
 
 <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">events</span> 
-<span class="k">where</span> <span class="p">(</span><span class="n">email</span> <span class="o">=~</span> <span class="o">/</span><span class="p">.</span><span class="o">*</span><span class="n">gmail</span><span class="p">.</span><span class="o">*</span> <span class="k">or</span> <span class="n">email</span> <span class="o">=~</span> <span class="o">/</span><span class="p">.</span><span class="o">*</span><span class="n">yahoo</span><span class="p">.</span><span class="o">*/</span><span class="p">)</span> <span class="k">and</span> <span class="k">state</span> <span class="o">=</span> <span class="s1">&#39;ny&#39;</span><span class="p">;</span>
+<span class="k">where</span> <span class="p">(</span><span class="n">email</span> <span class="o">=~</span> <span class="o">/</span><span class="p">.</span><span class="o">*</span><span class="n">gmail</span><span class="p">.</span><span class="o">*</span> <span class="k">or</span> <span class="n">email</span> <span class="o">=~</span> <span class="o">/</span><span class="p">.</span><span class="o">*</span><span class="n">yahoo</span><span class="p">.</span><span class="o">*/</span><span class="p">)</span> <span class="k">and</span> <span class="k">state</span> <span class="o">==</span> <span class="s1">'ny'</span><span class="p">;</span>
 </pre>
-<p>The where clause supports comparisons against regexes, strings, booleans, floats, integers, and the times listed before. Comparators include <code>=</code> equal to, <code>&gt;</code> greater than, <code>&lt;</code> less than, <code>!=</code> not equal to, <code>=~</code> matches against, <code>!~</code> doesn&rsquo;t match against. You can chain logic together using <code>and</code> and <code>or</code> and you can separate using <code>(</code> and <code>)</code></p>
+<p>The where clause supports comparisons against regexes, strings, booleans, floats, integers, and the times listed before. Comparators include <code>==</code> equal to, <code>&gt;</code> greater than, <code>&lt;</code> less than, <code>!=</code> not equal to, <code>=~</code> matches against, <code>!~</code> doesn&rsquo;t match against. You can chain logic together using <code>and</code> and <code>or</code> and you can separate using <code>(</code> and <code>)</code></p>
 
 <h3>Group By</h3>
 
@@ -89,7 +89,7 @@
 <pre class="highlight sql"><span class="k">select</span> <span class="n">hosta</span><span class="p">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">hostb</span><span class="p">.</span><span class="n">value</span> 
 <span class="k">from</span> <span class="n">cpu_load</span> <span class="k">as</span> <span class="n">hosta</span> 
 <span class="k">inner</span> <span class="k">join</span> <span class="n">cpu_load</span> <span class="k">as</span> <span class="n">hostb</span> 
-<span class="k">where</span> <span class="n">hosta</span><span class="p">.</span><span class="k">host</span> <span class="o">=</span> <span class="s1">&#39;hosta.influxdb.orb&#39;</span> <span class="k">and</span> <span class="n">hostb</span><span class="p">.</span><span class="k">host</span> <span class="o">=</span> <span class="s1">&#39;hostb.influxdb.org&#39;</span><span class="p">;</span>
+<span class="k">where</span> <span class="n">hosta</span><span class="p">.</span><span class="k">host</span> <span class="o">=</span> <span class="s1">'hosta.influxdb.orb'</span> <span class="k">and</span> <span class="n">hostb</span><span class="p">.</span><span class="k">host</span> <span class="o">=</span> <span class="s1">'hostb.influxdb.org'</span><span class="p">;</span>
 </pre>
 <p>The above query will return a time series of the combined cpu load for hosts a and b. The individual points will be coerced into the closest time frames to match up.</p>
 <pre class="highlight sql"><span class="k">select</span> <span class="n">errors_per_minute</span><span class="p">.</span><span class="n">value</span> <span class="o">/</span> <span class="n">page_views_per_minute</span><span class="p">.</span><span class="n">value</span> 

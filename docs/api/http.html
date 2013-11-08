@@ -160,7 +160,7 @@ curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
 
 <p>There are two endpoints for creating or dropping databases. The requesting user must be a cluster administrator.</p>
 <pre class="highlight shell"><span class="c"># create a database</span>
-curl -X POST http://localhost:8086/db -d <span class="s1">&#39;{&quot;name&quot;: &quot;site_development&quot;}&#39;</span>
+curl -X POST http://localhost:8086/db -d <span class="s1">'{&quot;name&quot;: &quot;site_development&quot;}'</span>
 
 <span class="c"># drop a database</span>
 curl -X DELETE http://localhost:8086/db/site_development
@@ -175,11 +175,11 @@ curl http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<sp
 
 <span class="c"># add cluster admin</span>
 curl -X POST http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}&#39;</span>
+  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update cluster admin password</span>
 curl -X POST http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;password&quot;: &quot;new pass&quot;}&#39;</span>
+  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
 
 <span class="c"># delete cluster admin</span>
 curl -X DELETE http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
@@ -190,11 +190,11 @@ curl http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;
 
 <span class="c"># add database admin</span>
 curl -X POST http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}&#39;</span>
+  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update database admin password</span>
 curl -X POST http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;password&quot;: &quot;new pass&quot;}&#39;</span>
+  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
 
 <span class="c"># delete database admin</span>
 curl -X DELETE http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
@@ -208,11 +208,11 @@ curl http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p
 
 <span class="c"># add database user</span>
 curl -X POST http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}&#39;</span>
+  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update database user password</span>
 curl -X POST http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;password&quot;: &quot;new pass&quot;}&#39;</span>
+  -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
 
 <span class="c"># delete database user</span>
 curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
