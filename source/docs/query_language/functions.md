@@ -77,6 +77,20 @@ in the event a dataset contains an even number of points, the median will
 be the average of the two middle values.
 
 
+## Distinct
+
+#### Overview
+
+DISTINCT() returns distinct values for the given column.
+
+#### Usage
+
+    SELECT DISTINCT(column_name) FROM series_name ...
+
+#### Description
+
+DISTINCT() takes a single column name which could be of any type.
+
 ## Percentile
 
 #### Overview
