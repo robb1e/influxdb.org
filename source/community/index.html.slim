@@ -8,8 +8,18 @@
       .row
         .large-6.columns
           p 
+            'Sign up for updates  
+            a href="#newsletter" on the InfluxDB newsletter
+            '.
+  .row.padding-bottom-medium
+    .large-1.columns
+      icon.fa.fa-comments.fa-border.fa-2x.fa-lg.pull-right.fa-align-center
+    .large-11.columns
+      .row
+        .large-6.columns
+          p 
             'Join the 
-            a href="https://groups.google.com/forum/#!forum/influxdb" mailing list for users and developers
+            a href="https://groups.google.com/forum/#!forum/influxdb" mailing list for users and developers.
             '.
   .row.padding-bottom-medium
     .large-1.columns
@@ -20,7 +30,7 @@
           p 
             'Follow
             a href="https://twitter.com/influxdb" @influxdb
-            '  on twitter 
+            '  on twitter. 
 
   .row.padding-bottom-medium
     .large-1.columns
@@ -29,7 +39,7 @@
       .row
         .large-6.columns
           p 
-            'Find us on freenode in #influxdb
+            'Find us on freenode in #influxdb.
 
   .row.padding-bottom-medium
     .large-1.columns
@@ -73,3 +83,5 @@
         'We're up for giving talks at local user groups, meetups, and conferences any time. We can talk about InfluxDB, distributed computing, our experience building in Go, or scaling real-time analytics. If it's within train distance from NYC, we'd be happy to come to you almost any time. Otherwise, get in touch at
         a href="mailto:influxdb@errplane.com" influxdb@errplane.com
         '  and tell us about your group and when you'd like us to drop by. If it requires a flight we'd like to make sure we can line up some other groups nearby around the same time.
+      h2#newsletter Newsletter
+      = partial "layouts/signup"
