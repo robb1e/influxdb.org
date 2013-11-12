@@ -203,7 +203,7 @@ curl 'http://localhost:8086/cluster_admins?u=root&p=root'
 
 # add cluster admin
 curl -X POST 'http://localhost:8086/cluster_admins?u=root&p=root' \
-  -d '{"username": "paul", "password": "i write teh docz"}'
+  -d '{"name: "paul", "password": "i write teh docz"}'
 
 # update cluster admin password
 curl -X POST 'http://localhost:8086/cluster_admins/paul?u=root&p=root' \
@@ -216,7 +216,7 @@ curl -X DELETE 'http://localhost:8086/cluster_admins/paul?u=root&p=root'
 
 # add database user
 curl -X POST 'http://localhost:8086/db/site_dev/users?u=root&p=root' \
-  -d '{"username": "paul", "password": "i write teh docz"}'
+  -d '{"name": "paul", "password": "i write teh docz"}'
 
 # delete database user
 curl -X DELETE 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root'
