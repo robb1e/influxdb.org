@@ -179,10 +179,11 @@ There are two endpoints for creating or dropping databases. The requesting user 
 
 ```bash
 # create a database
-curl -X POST http://localhost:8086/db -d '{"name": "site_development"}'
+curl -X POST 'http://localhost:8086/db?u=root&p=root' \
+  -d '{"name": "site_development"}'
 
 # drop a database
-curl -X DELETE http://localhost:8086/db/site_development
+curl -X DELETE 'http://localhost:8086/db/site_development?u=root&p=root'
 ```
 
 #### Security
@@ -193,33 +194,33 @@ Here are the endpoints for administration:
 
 ```bash
 # get list of cluster admins
-curl http://localhost:8086/cluster_admins?u=root&p=root
+curl 'http://localhost:8086/cluster_admins?u=root&p=root'
 
 # add cluster admin
-curl -X POST http://localhost:8086/cluster_admins?u=root&p=root \
+curl -X POST 'http://localhost:8086/cluster_admins?u=root&p=root' \
   -d '{"username": "paul", "password": "i write teh docz"}'
 
 # update cluster admin password
-curl -X POST http://localhost:8086/cluster_admins/paul?u=root&p=root \
+curl -X POST 'http://localhost:8086/cluster_admins/paul?u=root&p=root' \
   -d '{"password": "new pass"}'
 
 # delete cluster admin
-curl -X DELETE http://localhost:8086/cluster_admins/paul?u=root&p=root
+curl -X DELETE 'http://localhost:8086/cluster_admins/paul?u=root&p=root'
 
 # Database admins, with a database name of site_dev
 # get list of database admins
-curl http://localhost:8086/db/site_dev/admins?u=root&p=root
+curl 'http://localhost:8086/db/site_dev/admins?u=root&p=root'
 
 # add database admin
-curl -X POST http://localhost:8086/db/site_dev/admins?u=root&p=root \
+curl -X POST 'http://localhost:8086/db/site_dev/admins?u=root&p=root' \
   -d '{"username": "paul", "password": "i write teh docz"}'
 
 # update database admin password
-curl -X POST http://localhost:8086/db/site_dev/admins/paul?u=root&p=root \
+curl -X POST 'http://localhost:8086/db/site_dev/admins/paul?u=root&p=root' \
   -d '{"password": "new pass"}'
 
 # delete database admin
-curl -X DELETE http://localhost:8086/db/site_dev/admins/paul?u=root&p=root
+curl -X DELETE 'http://localhost:8086/db/site_dev/admins/paul?u=root&p=root'
 ```
 
 ##### Limiting User Access
@@ -229,18 +230,18 @@ Database users are a special case of user that can have their read and write per
 ```bash
 # Database users
 # get list of database users
-curl http://localhost:8086/db/site_dev/users?u=root&p=root
+curl 'http://localhost:8086/db/site_dev/users?u=root&p=root'
 
 # add database user
-curl -X POST http://localhost:8086/db/site_dev/users?u=root&p=root \
+curl -X POST 'http://localhost:8086/db/site_dev/users?u=root&p=root' \
   -d '{"username": "paul", "password": "i write teh docz"}'
 
 # update database user password
-curl -X POST http://localhost:8086/db/site_dev/users/paul?u=root&p=root \
+curl -X POST 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root' \
   -d '{"password": "new pass"}'
 
 # delete database user
-curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u=root&p=root
+curl -X DELETE 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root'
 ```
 
 Database users have two additional arguments when creating or updating their objects: `readPermissions` and `writePermissions`. Here's what a default database user looks like when those arguments aren't specified on create.
