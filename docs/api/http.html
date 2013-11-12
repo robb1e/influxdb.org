@@ -160,10 +160,11 @@ curl -X DELETE http://localhost:8086/db/site_dev/scheduled_deletes/:id
 
 <p>There are two endpoints for creating or dropping databases. The requesting user must be a cluster administrator.</p>
 <pre class="highlight shell"><span class="c"># create a database</span>
-curl -X POST http://localhost:8086/db -d <span class="s1">'{&quot;name&quot;: &quot;site_development&quot;}'</span>
+curl -X POST <span class="s1">'http://localhost:8086/db?u=root&amp;p=root'</span> <span class="se">\</span>
+  -d <span class="s1">'{&quot;name&quot;: &quot;site_development&quot;}'</span>
 
 <span class="c"># drop a database</span>
-curl -X DELETE http://localhost:8086/db/site_development
+curl -X DELETE <span class="s1">'http://localhost:8086/db/site_development?u=root&amp;p=root'</span>
 </pre>
 <h4>Security</h4>
 
@@ -171,51 +172,51 @@ curl -X DELETE http://localhost:8086/db/site_development
 
 <p>Here are the endpoints for administration:</p>
 <pre class="highlight shell"><span class="c"># get list of cluster admins</span>
-curl http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+curl <span class="s1">'http://localhost:8086/cluster_admins?u=root&amp;p=root'</span>
 
 <span class="c"># add cluster admin</span>
-curl -X POST http://localhost:8086/cluster_admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+curl -X POST <span class="s1">'http://localhost:8086/cluster_admins?u=root&amp;p=root'</span> <span class="se">\</span>
   -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update cluster admin password</span>
-curl -X POST http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+curl -X POST <span class="s1">'http://localhost:8086/cluster_admins/paul?u=root&amp;p=root'</span> <span class="se">\</span>
   -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
 
 <span class="c"># delete cluster admin</span>
-curl -X DELETE http://localhost:8086/cluster_admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+curl -X DELETE <span class="s1">'http://localhost:8086/cluster_admins/paul?u=root&amp;p=root'</span>
 
 <span class="c"># Database admins, with a database name of site_dev</span>
 <span class="c"># get list of database admins</span>
-curl http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+curl <span class="s1">'http://localhost:8086/db/site_dev/admins?u=root&amp;p=root'</span>
 
 <span class="c"># add database admin</span>
-curl -X POST http://localhost:8086/db/site_dev/admins?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+curl -X POST <span class="s1">'http://localhost:8086/db/site_dev/admins?u=root&amp;p=root'</span> <span class="se">\</span>
   -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update database admin password</span>
-curl -X POST http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+curl -X POST <span class="s1">'http://localhost:8086/db/site_dev/admins/paul?u=root&amp;p=root'</span> <span class="se">\</span>
   -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
 
 <span class="c"># delete database admin</span>
-curl -X DELETE http://localhost:8086/db/site_dev/admins/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+curl -X DELETE <span class="s1">'http://localhost:8086/db/site_dev/admins/paul?u=root&amp;p=root'</span>
 </pre>
 <h5>Limiting User Access</h5>
 
 <p>Database users are a special case of user that can have their read and write permissions limited. The interface for creating and updating the users is similar to cluster and database admins.</p>
 <pre class="highlight shell"><span class="c"># Database users</span>
 <span class="c"># get list of database users</span>
-curl http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+curl <span class="s1">'http://localhost:8086/db/site_dev/users?u=root&amp;p=root'</span>
 
 <span class="c"># add database user</span>
-curl -X POST http://localhost:8086/db/site_dev/users?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+curl -X POST <span class="s1">'http://localhost:8086/db/site_dev/users?u=root&amp;p=root'</span> <span class="se">\</span>
   -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update database user password</span>
-curl -X POST http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root <span class="se">\</span>
+curl -X POST <span class="s1">'http://localhost:8086/db/site_dev/users/paul?u=root&amp;p=root'</span> <span class="se">\</span>
   -d <span class="s1">'{&quot;password&quot;: &quot;new pass&quot;}'</span>
 
 <span class="c"># delete database user</span>
-curl -X DELETE http://localhost:8086/db/site_dev/users/paul?u<span class="o">=</span>root&amp;p<span class="o">=</span>root
+curl -X DELETE <span class="s1">'http://localhost:8086/db/site_dev/users/paul?u=root&amp;p=root'</span>
 </pre>
 <p>Database users have two additional arguments when creating or updating their objects: <code>readPermissions</code> and <code>writePermissions</code>. Here&rsquo;s what a default database user looks like when those arguments aren&rsquo;t specified on create.</p>
 <pre class="highlight json"><span class="p">{</span><span class="w">
