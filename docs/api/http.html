@@ -181,7 +181,7 @@ curl <span class="s1">'http://localhost:8086/cluster_admins?u=root&amp;p=root'</
 
 <span class="c"># add cluster admin</span>
 curl -X POST <span class="s1">'http://localhost:8086/cluster_admins?u=root&amp;p=root'</span> <span class="se">\</span>
-  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+  -d <span class="s1">'{&quot;name: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># update cluster admin password</span>
 curl -X POST <span class="s1">'http://localhost:8086/cluster_admins/paul?u=root&amp;p=root'</span> <span class="se">\</span>
@@ -194,7 +194,7 @@ curl -X DELETE <span class="s1">'http://localhost:8086/cluster_admins/paul?u=roo
 
 <span class="c"># add database user</span>
 curl -X POST <span class="s1">'http://localhost:8086/db/site_dev/users?u=root&amp;p=root'</span> <span class="se">\</span>
-  -d <span class="s1">'{&quot;username&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
+  -d <span class="s1">'{&quot;name&quot;: &quot;paul&quot;, &quot;password&quot;: &quot;i write teh docz&quot;}'</span>
 
 <span class="c"># delete database user</span>
 curl -X DELETE <span class="s1">'http://localhost:8086/db/site_dev/users/paul?u=root&amp;p=root'</span>
