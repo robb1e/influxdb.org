@@ -188,7 +188,12 @@ curl -X DELETE 'http://localhost:8086/db/site_development?u=root&p=root'
 
 #### Security
 
-InfluxDB has three different kinds of users: cluster admins, database admins, and database users. Cluster admins are able to create and drop databases, and create and delete all kinds of users. Database admins can read and write data from all series, and create and delete database admins and users. Database users are able to either read or write data based on their permissions.
+InfluxDB has three different kinds of users: cluster admins, database
+admins, and database users. Cluster admins are able to create and drop
+databases, and create and delete all kinds of users. Database admins
+can read and write data from all series, and create and delete
+database admins and users. Database users are able to either read or
+write data based on their permissions.
 
 Here are the endpoints for administration:
 
@@ -207,44 +212,38 @@ curl -X POST 'http://localhost:8086/cluster_admins/paul?u=root&p=root' \
 # delete cluster admin
 curl -X DELETE 'http://localhost:8086/cluster_admins/paul?u=root&p=root'
 
-# Database admins, with a database name of site_dev
-# get list of database admins
-curl 'http://localhost:8086/db/site_dev/admins?u=root&p=root'
-
-# add database admin
-curl -X POST 'http://localhost:8086/db/site_dev/admins?u=root&p=root' \
-  -d '{"username": "paul", "password": "i write teh docz"}'
-
-# update database admin password
-curl -X POST 'http://localhost:8086/db/site_dev/admins/paul?u=root&p=root' \
-  -d '{"password": "new pass"}'
-
-# delete database admin
-curl -X DELETE 'http://localhost:8086/db/site_dev/admins/paul?u=root&p=root'
-```
-
-##### Limiting User Access
-
-Database users are a special case of user that can have their read and write permissions limited. The interface for creating and updating the users is similar to cluster and database admins.
-
-```bash
-# Database users
-# get list of database users
-curl 'http://localhost:8086/db/site_dev/users?u=root&p=root'
+# Database users, with a database name of site_dev
 
 # add database user
 curl -X POST 'http://localhost:8086/db/site_dev/users?u=root&p=root' \
   -d '{"username": "paul", "password": "i write teh docz"}'
 
-# update database user password
+# delete database user
+curl -X DELETE 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root'
+
+# update user's password
 curl -X POST 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root' \
   -d '{"password": "new pass"}'
 
-# delete database user
-curl -X DELETE 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root'
+# get list of database users
+curl 'http://localhost:8086/db/site_dev/users?u=root&p=root'
+
+# add database admin privilege
+curl -X POST 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root' \
+  -d '{"admin": true}'
+
+# remove database admin privilege
+curl -X POST 'http://localhost:8086/db/site_dev/users/paul?u=root&p=root' \
+  -d '{"admin": false}'
+
 ```
 
-Database users have two additional arguments when creating or updating their objects: `readPermissions` and `writePermissions`. Here's what a default database user looks like when those arguments aren't specified on create.
+##### Limiting User Access
+
+Database users have two additional arguments when creating or updating
+their objects: `readPermissions` and `writePermissions`. Here's what a
+default database user looks like when those arguments aren't specified
+on create.
 
 ```json
 {
@@ -262,7 +261,9 @@ Database users have two additional arguments when creating or updating their obj
 }
 ```
 
-This example user has the ability to read and write from any time series. If you want to restrict the user to only being able to write data, update the user by `POST`ing to `db/site_dev/users/paul`.
+This example user has the ability to read and write from any time
+series. If you want to restrict the user to only being able to write
+data, update the user by `POST`ing to `db/site_dev/users/paul`.
 
 ```json
 {
@@ -275,7 +276,9 @@ This example user has the ability to read and write from any time series. If you
 }
 ```
 
-It's also possible to limit a user's permissions for reads and writes so they can only write specific values for a given column or request a subset of series data.
+It's also possible to limit a user's permissions for reads and writes
+so they can only write specific values for a given column or request a
+subset of series data.
 
 ```json
 {
@@ -299,6 +302,14 @@ It's also possible to limit a user's permissions for reads and writes so they ca
 }
 ```
 
-In this example we have a user that is allowed to read from any time series, but when reading from `customer_events`, they will only be able to see events that have a `customer_id` of `3`. The user is only able to write to the `customer_events` time series, but the only value they can write to the `customer_id` column is `3`. This would let you have multiple users writing into the same analytics series without exposing their data to each other.
+In this example we have a user that is allowed to read from any time
+series, but when reading from `customer_events`, they will only be
+able to see events that have a `customer_id` of `3`. The user is only
+able to write to the `customer_events` time series, but the only value
+they can write to the `customer_id` column is `3`. This would let you
+have multiple users writing into the same analytics series without
+exposing their data to each other.
 
-InfluxDB decides which permission to apply by first looking for exact matches. If there is one then it is applied. Otherwise, it iterates through the regexes and uses the first matching one.
+InfluxDB decides which permission to apply by first looking for exact
+matches. If there is one then it is applied. Otherwise, it iterates
+through the regexes and uses the first matching one.
