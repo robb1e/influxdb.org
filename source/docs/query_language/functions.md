@@ -1,3 +1,18 @@
+## Count
+
+#### Overview
+
+COUNT() returns the number of points
+
+#### Usage
+
+    SELECT COUNT(column_name) FROM series_name ...
+
+#### Description
+
+COUNT() takes a single column name, and count the number of points
+that contains a non NULL value for the given column name.
+
 ## Min
 
 #### Overview
